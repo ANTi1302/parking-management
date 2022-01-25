@@ -1,0 +1,45 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import connectDB.ConnectDB;
+import entity.TheXe;
+
+public class TheXe_Dao {
+	public TheXe getNhanVienTheoMaNV(String ma) {
+		TheXe nv = null;
+		
+		
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance().connect();
+			Connection con = (Connection) ConnectDB.getConnection();
+			String sql = "Select * from TheXe where barcode = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, ma);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next() == false) {
+				return nv;
+			} else {
+				int id = rs.getInt("id");
+				String bar = rs.getString("barcode");
+				nv = new TheXe(id, bar);
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+			} catch (SQLException e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}
+		return nv;
+	}
+}

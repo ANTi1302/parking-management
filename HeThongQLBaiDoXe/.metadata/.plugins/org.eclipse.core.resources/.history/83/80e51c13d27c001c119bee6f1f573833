@@ -1,0 +1,12 @@
+package ui;
+
+public class UI_QuanLyDonGia {
+
+	public UI_QuanLyDonGia() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public static void main(String[] args) {
+		
+	}
+}

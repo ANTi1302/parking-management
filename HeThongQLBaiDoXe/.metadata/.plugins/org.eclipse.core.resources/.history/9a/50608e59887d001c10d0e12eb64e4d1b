@@ -1,0 +1,14 @@
+import com.aspose.barcode.barcoderecognition.BarCodeReader;
+import com.aspose.barcode.barcoderecognition.BarCodeResult;
+import com.aspose.barcode.barcoderecognition.DecodeType;
+
+public class Read {
+public static void main(String[] args) {
+	BarCodeReader reader = new BarCodeReader("barcode/generate-barcode03.png", DecodeType.CODE_16_K);				
+	// scan and read barcode  
+	for (BarCodeResult result : reader.readBarCodes()) {
+		System.out.println("CodeText: " + result.getCodeText());
+		System.out.println("Symbology type: " + result.getCodeType());
+	} 
+}
+}

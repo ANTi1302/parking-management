@@ -1,0 +1,21 @@
+
+
+import java.io.IOException;
+
+import com.aspose.barcode.generation.BarcodeGenerator;
+import com.aspose.barcode.generation.EncodeTypes;
+
+public class App {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		BarcodeGenerator generator = new BarcodeGenerator(EncodeTypes.CODE_16_K, "Aspose.BarCode");
+		// set resolution
+		generator.getParameters().setResolution(400);
+		// generate barcode
+		generator.save("barcode/generate-barcode03.png");
+		
+		
+	}
+
+}

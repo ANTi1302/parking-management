@@ -1,0 +1,93 @@
+package ui;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+public class UI_QuanLyGoiDoXe extends JFrame{
+
+	private JTable tblgoi;
+	private DefaultTableModel tblModelGoi;
+	private JButton btnTimKiem, btnXoaTimKiem, btnThem,btnCapNhat,btnXoa;
+	private JTextField txtTiemKiem;
+	public UI_QuanLyGoiDoXe() throws IOException {
+		BufferedImage imagebycycle = ImageIO.read(new File("image/bicycle.png"));
+		ImageIcon imgbycycle = new ImageIcon(imagebycycle.getScaledInstance(50, 50, imagebycycle.SCALE_SMOOTH));
+		setTitle("Quản lý gói đỗ xe");
+		setIconImage(imgbycycle.getImage());
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+				(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+		setVisible(true);
+		giaoDien();
+	}
+	private void giaoDien() {
+		JPanel pnMain = new JPanel();
+		pnMain.setLayout(null);
+		pnMain.setBackground(new Color(53, 57, 65));
+		JPanel pnlNorth;
+		pnMain.add(pnlNorth = new JPanel());
+		
+		btnTimKiem =new JButton("Tìm kiếm");
+		txtTiemKiem =new JTextField();
+		int w1 = 190, w2 = 500, h = 40;
+		btnTimKiem.setBounds(500, 20, w1, h);
+		txtTiemKiem.setBounds(500, 60, w1, h);
+		pnlNorth.setBorder(BorderFactory.createTitledBorder(null, null, TitledBorder.LEFT, TitledBorder.TOP, new Font("times new roman",Font.PLAIN,12), new Color(111,144,199)));
+		pnlNorth.setBackground(new Color(53, 57, 65));
+		pnlNorth.add(btnTimKiem);
+		pnlNorth.add(txtTiemKiem);
+		pnlNorth.setLayout(null);
+		pnlNorth.setBounds(20, 10, 720, 200);
+		
+		
+		
+		
+		JPanel pnlEast;
+		pnMain.add(pnlEast = new JPanel());
+		pnlEast.setBorder(BorderFactory.createTitledBorder(null, "Hành động", TitledBorder.LEFT, TitledBorder.TOP, new Font("times new roman",Font.PLAIN,12), new Color(111,144,199)));
+		pnlEast.setBackground(new Color(53, 57, 65));
+		pnlEast.setLayout(null);
+		pnlEast.setBounds(780, 10, 720, 200);
+
+		
+		String[] str = { "Tên gói", "Giá", "Thời lượng", "Visible","Mô tả" };
+		tblModelGoi = new DefaultTableModel(str, 0);
+		tblgoi = new JTable(tblModelGoi);
+		JScrollPane jsc = new JScrollPane(tblgoi);
+		tblgoi.setAutoCreateRowSorter(true);
+		jsc.getVerticalScrollBar().setUnitIncrement(16);
+		jsc.setBounds(10, 20, 1460, 400);
+		JPanel pnlSouth;
+		pnMain.add(pnlSouth = new JPanel());
+		pnlSouth.setBorder(BorderFactory.createTitledBorder(null, "Danh sách", TitledBorder.LEFT, TitledBorder.TOP, new Font("times new roman",Font.PLAIN,12), new Color(111,144,199)));
+		pnlSouth.setBackground(new Color(53, 57, 65));
+		pnlSouth.add(jsc);
+		pnlSouth.setLayout(null);
+		pnlSouth.setBounds(20, 250, 1480, 520);
+		
+		
+		
+		
+		add(pnMain);
+	}
+	public static void main(String[] args) throws IOException {
+		new UI_QuanLyGoiDoXe();
+	}
+}

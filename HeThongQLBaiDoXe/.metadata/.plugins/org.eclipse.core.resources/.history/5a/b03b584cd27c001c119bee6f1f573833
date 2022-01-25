@@ -1,0 +1,36 @@
+package ui;
+
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+
+public class UI_QuanLyDonGia extends JFrame {
+
+	public UI_QuanLyDonGia() {
+
+		BufferedImage imagebycycle = ImageIO.read(new File("image/bicycle.png"));
+		ImageIcon imgbycycle = new ImageIcon(imagebycycle.getScaledInstance(50, 50, imagebycycle.SCALE_SMOOTH));
+		setTitle("Quản lý đơn giá");
+		setIconImage(imgbycycle.getImage());
+//		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+				(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+		setVisible(true);
+		giaoDien();
+	
+	
+	}
+	
+	private void giaoDien() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public static void main(String[] args) {
+		new UI_QuanLyDonGia();
+	}
+}
