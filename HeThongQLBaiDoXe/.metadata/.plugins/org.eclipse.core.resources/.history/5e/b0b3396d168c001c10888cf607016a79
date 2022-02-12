@@ -482,8 +482,6 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 			}
 		} else if (sou.equals(btnXacNhan)) {
 			click=true;
-		} else if (sou.equals(btnReset)) {
-			click=true;
 		}
 		
 	}

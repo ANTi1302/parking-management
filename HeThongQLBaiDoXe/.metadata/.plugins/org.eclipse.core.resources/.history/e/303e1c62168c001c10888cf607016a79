@@ -278,7 +278,6 @@ public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 		add(pnMain);
 		btnDongCong.addActionListener(this);
 		btnXacNhan.addActionListener(this);
-		btnReset.addActionListener(this);
 		txtBienSo.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyReleased(java.awt.event.KeyEvent evt) {
 				try {
@@ -481,8 +480,6 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 				e1.printStackTrace();
 			}
 		} else if (sou.equals(btnXacNhan)) {
-			click=true;
-		} else if (sou.equals(btnReset)) {
 			click=true;
 		}
 		
