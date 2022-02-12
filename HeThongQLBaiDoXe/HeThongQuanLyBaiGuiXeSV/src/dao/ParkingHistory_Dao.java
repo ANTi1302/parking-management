@@ -92,4 +92,50 @@ public class ParkingHistory_Dao {
 		}return kh;
 	
 	}
+	
+//	UPDATE [dbo].[ParkingHistory]
+//			SET [check_out_at] = '2/12/2022'
+//			WHERE EXISTS(
+//
+//			SELECT [license_plate],[check_in_at],[check_out_at]
+//			FROM     Custemer INNER JOIN
+//			                  ParkingHistory ON Custemer.ID_custemer = ParkingHistory.custemer_id INNER JOIN
+//			                  TheXe ON Custemer.card_id = TheXe.id
+//					where TheXe.barcode='04894957'
+//							  )
+public boolean updateTimeOut(String barco) {
+		
+		ConnectDB.getInstance();
+		Connection con=(Connection) ConnectDB.getConnection();
+		PreparedStatement stmt=null;
+		int n=0;
+		try {
+			stmt=con.prepareStatement("UPDATE [dbo].[ParkingHistory]\r\n"
+					+ "SET [check_out_at] = GETDATE()\r\n"
+					+ "WHERE EXISTS(\r\n"
+					+ "\r\n"
+					+ "SELECT [license_plate],[check_in_at],[check_out_at]\r\n"
+					+ "FROM     Custemer INNER JOIN\r\n"
+					+ "                  ParkingHistory ON Custemer.ID_custemer = ParkingHistory.custemer_id INNER JOIN\r\n"
+					+ "                  TheXe ON Custemer.card_id = TheXe.id\r\n"
+					+ "		where TheXe.barcode=?\r\n"
+					+ "				  )");
+			stmt.setString(1,barco);
+			n=stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				stmt.close();
+			} catch (SQLException e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}return n>0;
+		
+		
+	}
 }

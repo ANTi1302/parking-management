@@ -1,7 +1,7 @@
 package app;
 
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Date;
 
 import connectDB.ConnectDB;
 import dao.KhachHang_Dao;
@@ -28,7 +28,12 @@ public class demo {
 //		}else {
 //			System.out.println("nooo");
 //		}
-		if (khachHang_Dao.updateMaChucVu("1")) {
+//		if (khachHang_Dao.updateMaChucVu("1")) {
+//			System.out.println("okk");
+//		}else {
+//			System.out.println("noooo");
+//		}
+		if (parkingHistory_Dao.updateTimeOut("04894957")) {
 			System.out.println("okk");
 		}else {
 			System.out.println("noooo");

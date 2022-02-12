@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -382,7 +383,7 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		new UI_DieuKhienXeRa().startCamera();
 	}
-	public void startCamera() throws IOException {
+	public void startCamera() throws IOException, SQLException {
 		capture= new org.opencv.videoio.VideoCapture(0);
 		mat = new Mat();
 		byte[] imageData;
@@ -408,7 +409,52 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 				
 				Imgcodecs.imwrite("images/"+name+".jpg", mat);
 				click=false;
+//				kh_Dao.updateMaChucVu(txtID.getText());
+//				txtBienSo.setText("");
+//				txtBienSo.setEditable(true);
+//				txtBienSo.requestFocus();
+//				txtBienSoXe.setText("");
+//				txtBienSoXe.setEditable(false);
+//				txtID.setText("");
+//				txtID.setEditable(false);
+//				cameraScreen1.setIcon(null);
+				
+				ConnectDB.getInstance();
+				Connection con=(Connection) ConnectDB.getConnection();
+				PreparedStatement stmt=null;
+				int n=0;
+				try {
+					stmt=con.prepareStatement("UPDATE [dbo].[ParkingHistory]\r\n"
+							+ "SET [check_out_at] = GETDATE()\r\n"
+							+ "WHERE EXISTS(\r\n"
+							+ "\r\n"
+							+ "SELECT [license_plate],[check_in_at],[check_out_at]\r\n"
+							+ "FROM     Custemer INNER JOIN\r\n"
+							+ "                  ParkingHistory ON Custemer.ID_custemer = ParkingHistory.custemer_id INNER JOIN\r\n"
+							+ "                  TheXe ON Custemer.card_id = TheXe.id\r\n"
+							+ "		where TheXe.barcode=?\r\n"
+							+ "				  )");
+					
+					stmt.setString(1,txtBienSo.getText());
+					n=stmt.executeUpdate();
+					
+				} catch (SQLException e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				finally {
+					try {
+						stmt.close();
+					} catch (SQLException e2) {
+						// TODO: handle exception
+						e2.printStackTrace();
+					}
+				}
 				kh_Dao.updateMaChucVu(txtID.getText());
+				Object[] obj = new Object[] { "ID", "Họ tên","Biển số xe","Giờ vào" };
+				DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
+				tblsv.setModel(tableModel);
+				tblsv.setAutoCreateRowSorter(true);
 				txtBienSo.setText("");
 				txtBienSo.setEditable(true);
 				txtBienSo.requestFocus();
@@ -418,7 +464,6 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 				txtID.setEditable(false);
 				cameraScreen1.setIcon(null);
 			}
-			
 			//Chay doc file
 		}
 		
