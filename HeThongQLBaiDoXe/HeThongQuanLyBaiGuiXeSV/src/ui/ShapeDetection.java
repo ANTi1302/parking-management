@@ -1,5 +1,9 @@
 package ui;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -10,14 +14,15 @@ import nu.pattern.OpenCV;
 
 public class ShapeDetection {
 
-  
 
-    static Runnable startShapeDetection(final JPanel cameraFeed,
-                                                final JPanel processedFeed,
-                                                final VideoCapture camera) {
+    static Runnable startShapeDetection(final JLabel cameraScreen,
+                                                final JLabel cameraScreen1,
+                                                 VideoCapture camera) {
         return () -> {
-            final Mat frame = new Mat();
+//        	OpenCV.loadShared();
 
+//	        final VideoCapture camera1 = new VideoCapture(0);
+            final Mat frame = new Mat();
             while (true) {
                 // Read frame from camera
                 camera.read(frame);
@@ -29,11 +34,12 @@ public class ShapeDetection {
                 ShapeDetectionUtil.markOuterContour(processed, frame);
 
                 // Draw current frame
-                ShapeDetectionUtil.drawImage(frame, cameraFeed);
+                ShapeDetectionUtil.drawImage(frame, cameraScreen);
 
                 // Draw current processed image (for debugging)
-                ShapeDetectionUtil.drawImage(processed, processedFeed);
+                ShapeDetectionUtil.drawImage(processed, cameraScreen1);
             }
         };
     }
+   
 }

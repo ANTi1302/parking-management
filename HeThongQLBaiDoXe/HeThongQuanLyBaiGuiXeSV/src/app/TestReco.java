@@ -24,7 +24,7 @@ public class TestReco {
 		ts = new Tesseract();
 		ts.setDatapath("");
 		ts.setLanguage("eng");
-		String text = ts.doOCR(getImage("images/2022-45-24-10-45-00.jpg"));
+		String text = ts.doOCR(getImage("images/2022-08-27-11-08-17.jpg"));
 		System.out.println(text);
 	}
 

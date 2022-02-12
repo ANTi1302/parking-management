@@ -14,6 +14,8 @@ public class KhachHang {
 	private TheXe card_id;
 	private Date created_at;
 	private Date updated_at;
+	private ParkingHistory parkingHistory;
+	
 	public int getID_custemer() {
 		return ID_custemer;
 	}
@@ -25,6 +27,13 @@ public class KhachHang {
 	}
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
+	}
+	
+	public ParkingHistory getParkingHistory() {
+		return parkingHistory;
+	}
+	public void setParkingHistory(ParkingHistory parkingHistory) {
+		this.parkingHistory = parkingHistory;
 	}
 	public String getStudent_id() {
 		return student_id;

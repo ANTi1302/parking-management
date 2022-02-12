@@ -3,8 +3,10 @@ package ui;
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -29,6 +31,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -47,8 +50,10 @@ import org.opencv.videoio.VideoCapture;
 
 import connectDB.ConnectDB;
 import dao.KhachHang_Dao;
+import dao.ParkingHistory_Dao;
 import dao.TheXe_Dao;
 import entity.KhachHang;
+import entity.ParkingHistory;
 import entity.TheXe;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -61,24 +66,22 @@ public class UI_DieuKhienXeVao extends JFrame implements ActionListener {
 			btnXemTrongBai;
 	private Checkbox ckcTuDong;
 	private JTable tblsv;
-	private JLabel cameraScreen, cameraScreen1;
+	private JLabel cameraScreen;
+	private JLabel cameraScreen1;
+	private JLabel cameraScreen2;
 	private org.opencv.videoio.VideoCapture capture;
 	private Mat mat;
 	private boolean click;
 	private String name;
 	private DefaultTableModel tblModelSV;
 	private Tesseract ts;
-	
-	
-	private TheXe_Dao theXe_Dao= new TheXe_Dao();
-	private KhachHang_Dao kh_Dao= new KhachHang_Dao();
-	
-	
-	
+	VideoCapture camera;
+	private TheXe_Dao theXe_Dao = new TheXe_Dao();
+	private KhachHang_Dao kh_Dao = new KhachHang_Dao();
+	private ParkingHistory_Dao parkingHistory_Dao=new ParkingHistory_Dao();
 	private UI_GiaoDienChinh frmGiaDienChinh;
 
 	public UI_DieuKhienXeVao() throws IOException, SQLException {
-		capture = new org.opencv.videoio.VideoCapture(0);
 		ConnectDB.getInstance().connect();
 		BufferedImage imagebycycle = ImageIO.read(new File("image/bicycle.png"));
 		ImageIcon imgbycycle = new ImageIcon(imagebycycle.getScaledInstance(50, 50, imagebycycle.SCALE_SMOOTH));
@@ -121,11 +124,15 @@ public class UI_DieuKhienXeVao extends JFrame implements ActionListener {
 		pnMain.add(pnlNorth = new JPanel());
 
 //		cameraScreen1 = new JLabel();
-//		cameraScreen1.setBounds(20, 20, 50, 50);
+//		cameraScreen1.setBounds(530, 20, 500, 500);
 //		pnlNorth.add(cameraScreen1);
+//
+//		cameraScreen2 = new JLabel();
+//		cameraScreen2.setBounds(530, 100, 500, 500);
+//		pnlNorth.add(cameraScreen2);
 
 		cameraScreen = new JLabel();
-		cameraScreen.setBounds(20, 20, 800, 500);
+		cameraScreen.setBounds(20, 20, 900, 500);
 		pnlNorth.add(cameraScreen);
 
 		pnlNorth.setBorder(BorderFactory.createTitledBorder(null, "Camera", TitledBorder.LEFT, TitledBorder.TOP,
@@ -143,7 +150,7 @@ public class UI_DieuKhienXeVao extends JFrame implements ActionListener {
 		pnlHeader.setLayout(null);
 		pnlHeader.setBounds(50, 600, 300, 150);
 
-		txtThe = new JTextField();
+		txtThe = new JPasswordField();
 		pnlHeader.add(txtThe);
 		int w1 = 220, w2 = 500, h = 40;
 		txtThe.setBounds(20, 20, w1, h);
@@ -184,9 +191,9 @@ public class UI_DieuKhienXeVao extends JFrame implements ActionListener {
 		btnReset.setBorder(new RoundedBorder(10));
 		btnNhanVien.setForeground(Color.GREEN);
 
-		txtMess = new JLabel("Hợp lý");
+		txtMess = new JLabel();
 		pnlHeader02.add(txtMess);
-		txtMess.setBounds(40, 100, w1, h);
+		txtMess.setBounds(140, 100, w1, h);
 		txtMess.setForeground(Color.GREEN);
 
 		JPanel pnlHeader01;
@@ -251,7 +258,6 @@ public class UI_DieuKhienXeVao extends JFrame implements ActionListener {
 		btnXemTrongBai.setForeground(new Color(130, 161, 192));
 		btnXemTrongBai.setBorder(new RoundedBorder(10));
 
-	
 		String[] str = { "Bien So Xe", "Barcode", "Giờ vào" };
 		tblModelSV = new DefaultTableModel(str, 0);
 		tblsv = new JTable(tblModelSV);
@@ -302,27 +308,30 @@ public class UI_DieuKhienXeVao extends JFrame implements ActionListener {
 			}
 		});
 	}
-private void keyType(KeyEvent evt) {
+
+	private void keyType(KeyEvent evt) {
 		if ("".equals(txtThe.getText().trim())) {
 			theXe_Dao.gettalltbThe();
 			Object[] obj = new Object[] { "Mã The", "Barcode" };
 			DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
 			tblsv.setModel(tableModel);
 			tblsv.setAutoCreateRowSorter(true);
+			txtMess.setText("Erro!!!");
 		}
-		
+
 	}
+
 //public void cbbTimKiemTenNhanVien() {
 //	
 //}
-private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLException {
-	if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
-		ConnectDB.getInstance();
-		Connection con = (Connection) ConnectDB.getConnection();
-		Statement statement = con.createStatement();
+	private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLException {
+		if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+			ConnectDB.getInstance();
+			Connection con = (Connection) ConnectDB.getConnection();
+			Statement statement = con.createStatement();
 
 			String cautruyvan = "";
-			cautruyvan = "Select * from TheXe where barcode = "+txtThe.getText().trim()+" ";
+			cautruyvan = "Select * from TheXe where barcode = " + txtThe.getText().trim() + " ";
 			ResultSet rs = ((java.sql.Statement) statement).executeQuery(cautruyvan);
 			Object[] obj = new Object[] { "Mã The", "Barcode" };
 			DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
@@ -333,33 +342,33 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 					Object[] item = new Object[2];
 					item[0] = rs.getString("id");
 					item[1] = rs.getString("barcode");
-					
+
 					tableModel.addRow(item);
 
 				}
+				txtMess.setText("Hợp lý");
 			} catch (SQLException ex) {
 				System.out.println(ex.toString());
 			}
 
 		}
-		
-	}
-	
 
+	}
 
 	public static void main(String[] args) throws IOException, TesseractException, SQLException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-
+//		startShapeDetection(cameraScreen2, cameraScreen1, capture).run();
 		new UI_DieuKhienXeVao().startCamera();
-		 
+		
+
 	}
 
 	public void startCamera() throws TesseractException, IOException {
 		capture = new org.opencv.videoio.VideoCapture(0);
-		
 		mat = new Mat();
 		byte[] imageData;
 		ImageIcon icon;
+//		startShapeDetection(cameraScreen2, cameraScreen1, capture).run();
 		while (true) {
 			capture.read(mat);
 
@@ -389,25 +398,29 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 				} else {
 //					 String fullname, String student_id, 
 //					String username, String password, String email, String phone, TheXe card_id, Date created_at, Date updated_at
-				TheXe the= theXe_Dao.getTheTheoBarcode(String.valueOf(txtThe.getText()));
-			
-				KhachHang kh= new KhachHang(txtBienSoXe.getText(),the, new Date());
-				SimpleDateFormat simpleDateFormat=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-				String datecreated= simpleDateFormat.format(kh.getCreated_at());
-						kh_Dao.create(kh);
-						tblModelSV.addRow(new Object[] { kh.getStudent_id(),the.getBarcode(),datecreated });
-						tblsv.setModel(tblModelSV);
-						tblsv.setAutoCreateRowSorter(true);
-						txtThe.setText("");
-						txtBienSoXe.setText("");
-						txtThe.requestFocus();
+					TheXe the = theXe_Dao.getTheTheoBarcode(String.valueOf(txtThe.getText()));
+
+					KhachHang kh = new KhachHang(txtBienSoXe.getText(), the, new Date());
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+					String datecreated = simpleDateFormat.format(kh.getCreated_at());
+					kh_Dao.create(kh);
+					ParkingHistory pr=new ParkingHistory(txtBienSoXe.getText(), new Date(), 5, kh_Dao.gettalltbKhachHangTheoIDCustumer(),name);
+					parkingHistory_Dao.create(pr);
+					tblModelSV.addRow(new Object[] { kh.getStudent_id(), the.getBarcode(), datecreated });
+					tblsv.setModel(tblModelSV);
+					tblsv.setAutoCreateRowSorter(true);
+					txtThe.setText("");
+					txtBienSoXe.setText("");
+					txtThe.requestFocus();
 				}
 				click = false;
-				
+
 			}
 		}
 
 	}
+
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -416,7 +429,7 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 			try {
 				frmGiaDienChinh = new UI_GiaoDienChinh();
 				capture.release();
-				
+
 				this.dispose();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -429,23 +442,26 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 			txtBienSoXe.setText("");
 			click = true;
 
-		}else if (sou.equals(btnMoCong)) {
-//			  OpenCV.loadShared();
-//
-//		        // Create panels
-//		        final JPanel cameraFeed = new JPanel();
-//		        final JPanel processedFeed = new JPanel();
-//		        ShapeDetectionUtil.createJFrame(cameraFeed, processedFeed);
-//
-//		        // Create video capture object (index 0 is default camera)
-//		        final VideoCapture camera = new VideoCapture(0);
-//
-//		        // Start shape detection
-//		        ShapeDetection.startShapeDetection(cameraFeed, processedFeed, camera).run();
-//
-//			this.dispose();
+		} else if (sou.equals(btnMoCong)) {
+			   capture.release();
+			
 		}
 
+	}
+
+	public static void createJFrame(final JLabel... panels) {
+		final JFrame window = new JFrame("Shape Detection");
+		window.setSize(new Dimension(panels.length * 640, 480));
+		window.setLocationRelativeTo(null);
+		window.setResizable(false);
+		window.setLayout(new GridLayout(1, panels.length));
+
+		for (final JLabel panel : panels) {
+			window.add(panel);
+		}
+
+		window.setVisible(true);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private BufferedImage getImage(String imgPath) throws IOException {

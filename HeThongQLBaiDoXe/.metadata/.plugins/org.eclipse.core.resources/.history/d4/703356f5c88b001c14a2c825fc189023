@@ -1,0 +1,47 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import connectDB.ConnectDB;
+import entity.ParkingHistory;
+
+public class ParkingHistory_Dao {
+
+	public boolean create(ParkingHistory pr) {
+		ConnectDB.getInstance();
+		Connection con=(Connection) ConnectDB.getConnection();
+		PreparedStatement stmt=null;
+		int n=0;
+		try {
+			stmt=con.prepareStatement("\r\n"
+					+ "INSERT [dbo].[ParkingHistory] ([license_plate],[check_in_at],[check_out_at],[price],[custemer_id]) \r\n"
+					+ "VALUES (?,?,?,?,?)");
+			stmt.setString(1,pr.getLicense_plate());
+			stmt.setDate(2,(Date) pr.getCheck_in_at());
+			stmt.setDate(3,(Date) pr.getCheck_out_at());
+			stmt.setDouble(4,pr.getPrice());
+			
+//			stmt.setDate(9, (Date) nv.getCreated_at());
+//			stmt.setDate(10,(Date) nv.getUpdated_at());
+//			SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+//			String datecreated= simpleDateFormat.format(nv.getCreated_at());
+			stmt.setInt(5, pr.getKhachHang().getID_custemer());
+			
+			n=stmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				stmt.close();
+			} catch (SQLException e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}return n>0;
+	}
+}

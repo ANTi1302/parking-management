@@ -65,4 +65,36 @@ public class TheXe_Dao {
 		return nv;
 	}
 	
+	public TheXe getTheTheoID(String ma) {
+		TheXe nv = null;
+
+		PreparedStatement statement = null;
+		try {
+			ConnectDB.getInstance().connect();
+			Connection con = (Connection) ConnectDB.getConnection();
+			String sql = "Select * from TheXe where id = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, ma);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next() == false) {
+				return nv;
+			} else {
+				int id = rs.getInt("id");
+				String bar = rs.getString("barcode");
+				nv = new TheXe(id, bar);
+			}
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+			} catch (SQLException e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}
+		return nv;
+	}
+	
 }

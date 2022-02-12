@@ -280,6 +280,9 @@ public class UI_GiaoDienChinh extends JFrame implements ActionListener{
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
 		else if (sou.equals(btnDangXuat)) {

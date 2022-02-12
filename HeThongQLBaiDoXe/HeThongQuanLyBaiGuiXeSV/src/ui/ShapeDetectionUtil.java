@@ -135,15 +135,15 @@ public final class ShapeDetectionUtil {
      * Draw forwarded mat image to forwarded panel.
      *
      * @param mat Image to draw.
-     * @param panel Panel on which to draw image.
+     * @param processedFeed Panel on which to draw image.
      */
-    public static void drawImage(final Mat mat, final JPanel panel) {
+    public static void drawImage(final Mat mat, final JLabel processedFeed) {
         // Get buffered image from mat frame
         final BufferedImage image = ShapeDetectionUtil.convertMatToBufferedImage(mat);
 
         // Draw image to panel
-        final Graphics graphics = panel.getGraphics();
-        graphics.drawImage(image, 0, 0, panel);
+        final Graphics graphics = processedFeed.getGraphics();
+        graphics.drawImage(image, 0, 0, processedFeed);
     }
     // endregion
 

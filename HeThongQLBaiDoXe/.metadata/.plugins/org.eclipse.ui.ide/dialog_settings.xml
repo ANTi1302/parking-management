@@ -11,6 +11,9 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\ANTi\OneDrive\Máy tính\demo_01\openCV_Tesseract_test-master"/>
+			<item value="C:\Users\ANTi\OneDrive\Máy tính\demo_01\barcode"/>
+			<item value="E:\ANTi_study\PTUD\BT Lon CK\Nhom6_QuanLyQuanAo_PTUD_15BTT_2021\DemoBarcode"/>
 			<item value="C:\Users\ANTi\OneDrive\Máy tính\demo_01\shape-detection-master"/>
 			<item value="C:\Users\ANTi\OneDrive\Máy tính\PlakaTanimaSistemiAccess"/>
 			<item value="C:\Users\ANTi\OneDrive\Máy tính\javaanpr-master"/>

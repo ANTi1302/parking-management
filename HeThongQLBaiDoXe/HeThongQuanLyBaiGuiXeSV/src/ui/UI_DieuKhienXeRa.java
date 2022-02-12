@@ -11,10 +11,14 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,6 +31,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -40,21 +45,31 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 
+import connectDB.ConnectDB;
+import dao.KhachHang_Dao;
+import dao.ParkingHistory_Dao;
+import dao.TheXe_Dao;
+import entity.KhachHang;
+
 
 public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 	private JTextField txtBienSo, txtBienSoXe,txtID;
 	private JButton btnNhanVien, btnReset,btnMoCong,btnDongCong,btnXacNhan,btnXemTheoThe,btnXemBienSo,btnXemTrongBai;
 	private Checkbox ckcTuDong;
 	private JTable tblsv;
-	private JLabel cameraScreen;
+	private JLabel cameraScreen,cameraScreen1;
 	private org.opencv.videoio.VideoCapture capture;
 	private Mat mat;
+	private String name;
 	private boolean click;
 	private DefaultTableModel tblModelSV;
 	private UI_GiaoDienChinh frmGiaDienChinh;
+	private TheXe_Dao theXe_Dao= new TheXe_Dao();
+	private KhachHang_Dao kh_Dao= new KhachHang_Dao();
+	private ParkingHistory_Dao parkingHistory_Dao= new ParkingHistory_Dao();
 	
-	
-	public UI_DieuKhienXeRa() throws IOException {
+	public UI_DieuKhienXeRa() throws IOException, SQLException {
+		ConnectDB.getInstance().connect();
 		BufferedImage imagebycycle = ImageIO.read(new File("image/bicycle.png"));
 		ImageIcon imgbycycle = new ImageIcon(imagebycycle.getScaledInstance(50, 50, imagebycycle.SCALE_SMOOTH));
 		setTitle("Quản lý xe ra");
@@ -95,13 +110,22 @@ public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 		pnMain.setBackground(new Color(53, 57, 65));
 		JPanel pnlNorth;
 		pnMain.add(pnlNorth = new JPanel());
+		
+		cameraScreen1 = new JLabel();
+		cameraScreen1.setBounds(400, 20, 500, 500);
+		cameraScreen1.setBackground(Color.BLUE);
+		pnlNorth.add(cameraScreen1);
+		
 		cameraScreen= new JLabel();
-		cameraScreen.setBounds(20, 20, 800, 500);
+		cameraScreen.setBounds(20, 20, 350, 500);
 		pnlNorth.add(cameraScreen);
 		
+		
+	
 		pnlNorth.setBorder(BorderFactory.createTitledBorder(null, "Camera", TitledBorder.LEFT, TitledBorder.TOP, new Font("times new roman",Font.PLAIN,12), new Color(111,144,199)));
 		pnlNorth.setBackground(new Color(53, 57, 65));
 		pnlNorth.setLayout(null);
+		pnlNorth.add(cameraScreen);
 		pnlNorth.setBounds(20, 10, 750, 550);
 
 		JPanel pnlHeader;
@@ -111,14 +135,14 @@ public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 		pnlHeader.setLayout(null);
 		pnlHeader.setBounds(50, 600, 300, 150);
 
-		txtBienSo = new JTextField();
+		txtBienSo = new JPasswordField();
 		pnlHeader.add(txtBienSo);
 		int w1 = 220, w2 = 500, h = 40;
 		txtBienSo.setBounds(20, 20, w1, h);
 		txtBienSo.setFont(new Font("Arial", 50, 20));
 		txtBienSo.setForeground(Color.WHITE);
 		txtBienSo.setBackground(new Color(39,40,44));
-		txtBienSo.setEditable(false);
+		txtBienSo.setEditable(true);
 		
 		txtID = new JTextField();
 		pnlHeader.add(txtID);
@@ -160,7 +184,7 @@ public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 		btnReset.setBorder(new RoundedBorder(10));
 		btnNhanVien.setForeground(Color.GREEN);
 
-		btnReset = new JButton("Đã trích xuất");
+		btnReset = new JButton();
 		pnlHeader02.add(btnReset);
 		btnReset.setBounds(40, 100, w1, h);
 		btnReset.setBorderPainted(false);
@@ -253,13 +277,112 @@ public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 		add(pnMain);
 		btnDongCong.addActionListener(this);
 		btnXacNhan.addActionListener(this);
+		txtBienSo.addKeyListener(new java.awt.event.KeyAdapter() {
+			public void keyReleased(java.awt.event.KeyEvent evt) {
+				try {
+					cbbTimKiemTenNhanVien(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		txtBienSo.addKeyListener(new java.awt.event.KeyAdapter() {
+			public void keyReleased(java.awt.event.KeyEvent evt) {
+				keyType(evt);
+			}
+		});
 	}
+	private void keyType(KeyEvent evt) {
+		if ("".equals(txtBienSo.getText().trim())) {
+			txtBienSo.setText("");
+			txtBienSo.setEditable(true);
+			txtBienSo.requestFocus();
+			txtBienSoXe.setText("");
+			txtBienSoXe.setEditable(false);
+			txtID.setText("");
+			txtID.setEditable(false);
+			JOptionPane.showMessageDialog(this, "Card not find");
+			btnReset.setText("Eror!!!");
+			
+		}
+		
+	}
+//public void cbbTimKiemTenNhanVien() {
+//	
+//}
+private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLException, IOException {
+	if (evt.getKeyCode()==KeyEvent.VK_ENTER) {
+		KhachHang kh = null;
+		kh = kh_Dao.gettalltbKhachHangTheoCard( String.valueOf(txtBienSo.getText()));
+		if (kh == null) {
+			txtBienSo.setText("");
+			txtBienSo.setEditable(true);
+			txtBienSo.requestFocus();
+			txtBienSoXe.setText("");
+			txtBienSoXe.setEditable(false);
+			txtID.setText("");
+			txtID.setEditable(false);
+			JOptionPane.showMessageDialog(this, "Card not find");
+		} else {
+//			txtBienSo.setText(kh.getCard_id().getBarcode());
+			txtID.setText(String.valueOf(kh.getCard_id().getId()));
+			txtBienSoXe.setText(kh.getStudent_id());
+			btnReset.setText("Đã trích xuất");
+			BufferedImage imagebycycle;
+			
+			
+			ConnectDB.getInstance();
+			Connection con = (Connection) ConnectDB.getConnection();
+			Statement statement = con.createStatement();
+			String cautruyvan = "";
+			cautruyvan = "\r\n"
+					+ "SELECT  ParkingHistory.license_plate, ParkingHistory.check_in_at, ParkingHistory.check_out_at, ParkingHistory.img\r\n"
+					+ "FROM     Custemer INNER JOIN\r\n"
+					+ "                  ParkingHistory ON Custemer.ID_custemer = ParkingHistory.custemer_id INNER JOIN\r\n"
+					+ "                  TheXe ON Custemer.card_id = TheXe.id\r\n"
+					+ "GROUP BY Custemer.ID_custemer, Custemer.fullname, ParkingHistory.license_plate, ParkingHistory.check_in_at, ParkingHistory.check_out_at, TheXe.barcode, ParkingHistory.img\r\n"
+					+ "having TheXe.barcode=" + txtBienSo.getText().trim() + " ";
+			ResultSet rs = ((java.sql.Statement) statement).executeQuery(cautruyvan);
+			Object[] obj = new Object[] { "Biển số xe", "Giờ vào","Giờ ra","Img" };
+			DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
+			tblsv.setModel(tableModel);
+			tblsv.setAutoCreateRowSorter(true);
+			try {
+				String name = "";
+				while (rs.next()) {
+					Object[] item = new Object[4];
+					item[0] = rs.getString("license_plate");
+					item[1] = rs.getString("check_in_at");
+					item[2] = rs.getString("check_out_at");
+					item[3] = rs.getString("img");
+					name=rs.getString("img");
+					System.out.println(name);
+					tableModel.addRow(item);
 
-	public static void main(String[] args) throws IOException {
+				}
+
+				imagebycycle = ImageIO.read(new File("images/"+name+".jpg"));
+				ImageIcon imgbycycle = new ImageIcon(imagebycycle.getScaledInstance(490, 490, imagebycycle.SCALE_SMOOTH));
+				cameraScreen1.setIcon(imgbycycle);
+			} catch (SQLException ex) {
+				System.out.println(ex.toString());
+			}
+
+		
+
+
+		}}
+		
+	}
+	public static void main(String[] args) throws IOException, SQLException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		new UI_DieuKhienXeRa().startCamera();
 	}
-	public void startCamera() {
+	public void startCamera() throws IOException {
 		capture= new org.opencv.videoio.VideoCapture(0);
 		mat = new Mat();
 		byte[] imageData;
@@ -278,7 +401,7 @@ public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 			cameraScreen.setIcon(icon);
 			
 			if (click) {
-				String name= JOptionPane.showInputDialog(this,"Enter image name");
+				 name= JOptionPane.showInputDialog(this,"Enter image name");
 				if (name==null) {
 					name= new SimpleDateFormat("yyyy-mm-dd-hh-mm-ss").format(new Date());
 				}
@@ -288,6 +411,7 @@ public class UI_DieuKhienXeRa extends JFrame implements ActionListener{
 			}
 			
 			//Chay doc file
+			
 		}
 		
 	}
