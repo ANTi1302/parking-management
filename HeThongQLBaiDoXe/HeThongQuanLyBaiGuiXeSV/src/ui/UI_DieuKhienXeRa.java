@@ -408,10 +408,18 @@ private void cbbTimKiemTenNhanVien(java.awt.event.KeyEvent evt) throws SQLExcept
 				
 				Imgcodecs.imwrite("images/"+name+".jpg", mat);
 				click=false;
+				kh_Dao.updateMaChucVu(txtID.getText());
+				txtBienSo.setText("");
+				txtBienSo.setEditable(true);
+				txtBienSo.requestFocus();
+				txtBienSoXe.setText("");
+				txtBienSoXe.setEditable(false);
+				txtID.setText("");
+				txtID.setEditable(false);
+				cameraScreen1.setIcon(null);
 			}
 			
 			//Chay doc file
-			
 		}
 		
 	}

@@ -28,6 +28,11 @@ public class demo {
 //		}else {
 //			System.out.println("nooo");
 //		}
+		if (khachHang_Dao.updateMaChucVu("1")) {
+			System.out.println("okk");
+		}else {
+			System.out.println("noooo");
+		}
 	}
 
 }

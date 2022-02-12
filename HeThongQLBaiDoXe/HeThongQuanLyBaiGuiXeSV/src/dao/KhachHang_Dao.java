@@ -159,4 +159,36 @@ public class KhachHang_Dao {
 			}
 		}return n>0;
 	}
+	
+//	UPDATE [dbo].[Custemer]
+//			SET  [card_id]= NULL
+//			WHERE [card_id]=1;
+public boolean updateMaChucVu(String kh) {
+		
+		ConnectDB.getInstance();
+		Connection con=(Connection) ConnectDB.getConnection();
+		PreparedStatement stmt=null;
+		int n=0;
+		try {
+			stmt=con.prepareStatement("UPDATE [dbo].[Custemer]\r\n"
+					+ "SET  [card_id]= NULL\r\n"
+					+ "WHERE [card_id]=?");
+			stmt.setString(1,kh);
+			n=stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				stmt.close();
+			} catch (SQLException e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}return n>0;
+		
+		
+	}
 }
