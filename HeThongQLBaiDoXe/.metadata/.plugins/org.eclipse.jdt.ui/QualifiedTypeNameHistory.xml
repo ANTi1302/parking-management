@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="ui.UI_DieuKhienXeRa"/>
-    <fullyQualifiedTypeName name="ui.UI_DangNhap"/>
-    <fullyQualifiedTypeName name="javax.swing.JTable"/>
-    <fullyQualifiedTypeName name="javax.swing.table.DefaultTableModel"/>
     <fullyQualifiedTypeName name="java.awt.Font"/>
     <fullyQualifiedTypeName name="javax.swing.JCheckBox"/>
     <fullyQualifiedTypeName name="java.awt.Checkbox"/>
@@ -54,10 +50,14 @@
     <fullyQualifiedTypeName name="javax.swing.JLabel"/>
     <fullyQualifiedTypeName name="ui.ShapeDetection"/>
     <fullyQualifiedTypeName name="ui.UI_DieuKhienXeVao"/>
-    <fullyQualifiedTypeName name="entity.KhachHang"/>
-    <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="java.awt.Color"/>
-    <fullyQualifiedTypeName name="java.lang.String"/>
     <fullyQualifiedTypeName name="entity.ParkingHistory"/>
     <fullyQualifiedTypeName name="dao.ParkingHistory_Dao"/>
+    <fullyQualifiedTypeName name="entity.KhachHang"/>
+    <fullyQualifiedTypeName name="java.sql.Date"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="java.text.DateFormat"/>
+    <fullyQualifiedTypeName name="java.util.Locale"/>
+    <fullyQualifiedTypeName name="java.lang.Object"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
 </qualifiedTypeNameHistroy>
