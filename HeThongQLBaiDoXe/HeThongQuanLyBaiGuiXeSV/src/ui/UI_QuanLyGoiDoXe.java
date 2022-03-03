@@ -108,9 +108,6 @@ public class UI_QuanLyGoiDoXe extends JFrame{
 		pnlNorth.setLayout(null);
 		pnlNorth.setBounds(20, 10, 720, 200);
 		
-		
-		
-		
 		JPanel pnlEast;
 		pnMain.add(pnlEast = new JPanel());
 		

@@ -24,7 +24,7 @@ public class TestReco {
 		ts = new Tesseract();
 		ts.setDatapath("");
 		ts.setLanguage("eng");
-		String text = ts.doOCR(getImage("images/2022-08-27-11-08-17.jpg"));
+		String text = ts.doOCR(getImage("images/demo02.png"));
 		System.out.println(text);
 	}
 
@@ -45,7 +45,7 @@ public class TestReco {
 		//convert to buffered
 		MatOfByte mof= new MatOfByte();
 		byte imageByte[];
-		Imgcodecs.imencode(".jpg", resized, mof);
+		Imgcodecs.imencode(".png", resized, mof);
 		imageByte= mof.toArray();
 		
 		
