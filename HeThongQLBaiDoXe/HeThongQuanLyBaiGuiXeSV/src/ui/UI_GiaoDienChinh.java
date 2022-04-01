@@ -42,6 +42,9 @@ public class UI_GiaoDienChinh extends JFrame implements ActionListener{
 	private UI_DangNhap frmGiaoDienDangNhap;
 	private UI_QuanLyGoiDoXe frmQuanLyGoiXe;
 	private UI_QuanLyDonGia frmQuanLyDonGia;
+	private UI_QuanLyKhachHang frmQuanLyKH;
+	private UI_QuanLyXeTrongBai frmQuanLyXeTrongBai;
+	private UI_QuanLyNhanVien frmQuanLyNV;
 	
 	public UI_GiaoDienChinh() throws IOException {
 		BufferedImage imagebycycle = ImageIO.read(new File("image/bicycle.png"));
@@ -315,6 +318,38 @@ public class UI_GiaoDienChinh extends JFrame implements ActionListener{
 			try {
 //				frmHoaDon = new UI_HoaDon(userCurr);
 				 frmQuanLyDonGia = new UI_QuanLyDonGia();
+				 
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else if (sou.equals(btnQLXeTrongBai)) {
+			try {
+//				frmHoaDon = new UI_HoaDon(userCurr);
+				 frmQuanLyXeTrongBai = new UI_QuanLyXeTrongBai();
+				 
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else if (sou.equals(btnQLNguoiDung)) {
+			try {
+//				frmHoaDon = new UI_HoaDon(userCurr);
+				 frmQuanLyKH = new UI_QuanLyKhachHang();
+				 
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}else if (sou.equals(btnQLNhanVien)) {
+			try {
+//				frmHoaDon = new UI_HoaDon(userCurr);
+				 frmQuanLyNV = new UI_QuanLyNhanVien();
 				 
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block

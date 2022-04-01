@@ -39,5 +39,6 @@
 	<classpathentry kind="lib" path="C:/Users/ANTi/OneDrive/Máy tính/lib_java/Tess4J-3.4.8-src/Tess4J/lib/xmlgraphics-commons-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/opencv-2.4.9-7.jar"/>
 	<classpathentry kind="lib" path="gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="lib/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

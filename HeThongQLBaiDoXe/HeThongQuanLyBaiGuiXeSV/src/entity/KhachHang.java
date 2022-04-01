@@ -127,6 +127,18 @@ public class KhachHang {
 	}
 	
 	
+	public KhachHang(int iD_custemer, String fullname, String username, String email, String phone, TheXe card_id,
+			Date created_at, Date updated_at) {
+		super();
+		ID_custemer = iD_custemer;
+		this.fullname = fullname;
+		this.username = username;
+		this.email = email;
+		this.phone = phone;
+		this.card_id = card_id;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+	}
 	public KhachHang(String text, int id, Date date) {
 		// TODO Auto-generated constructor stub
 	}
